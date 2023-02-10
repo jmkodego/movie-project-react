@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import MovieList from "./components/Movie/MovieList";
-
+import axios from "axios";
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -12,13 +12,12 @@ function App() {
     setError(null);
 
     try {
-      const response = await fetch("https://swapi.dev/api/films/");
-
-      if (!response.ok) {
+      const response = await axios.get("https://swapi.dev/api/films/");
+      if (response.status !== 200) {
         throw new Error("Something went wrong!");
       }
 
-      const data = await response.json();
+      const { data } = response;
       const transformedMovies = data.results.map((movieData) => {
         return {
           id: movieData.episode_id,
